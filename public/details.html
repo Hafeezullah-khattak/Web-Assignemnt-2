@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Item Details | Lost & Found Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <main>
+    <h2>Item Details</h2>
+    <div class="details-box" id="details-box">
+      <p>Loading item details...</p>
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    // Details page logic (kept inline since it's only used on this one page)
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      const box = document.getElementById("details-box");
+
+      if (!id) {
+        box.innerHTML = "<p>No item ID was provided.</p>";
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/items/${id}`);
+        if (!response.ok) {
+          throw new Error("Item not found.");
+        }
+        const item = await response.json();
+
+        box.innerHTML = `
+          <span class="badge ${item.type.toLowerCase()}">${item.type}</span>
+          <h3>${item.name}</h3>
+          <p><strong>ID:</strong> ${item.id}</p>
+          <p><strong>Category:</strong> ${item.category}</p>
+          <p><strong>Location:</strong> ${item.location}</p>
+          <p><strong>Date:</strong> ${item.date}</p>
+          <p><strong>Description:</strong> ${item.description}</p>
+          <p class="status"><strong>Status:</strong> ${item.status}</p>
+          <div class="card-actions">
+            <a class="btn btn-edit" href="form.html?id=${item.id}">Edit</a>
+            <button class="btn btn-delete" onclick="deleteItem(${item.id})">Delete</button>
+            <a class="btn btn-view" href="items.html">Back to Items</a>
+          </div>
+        `;
+      } catch (err) {
+        box.innerHTML = "<p>Sorry, this item could not be found.</p>";
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

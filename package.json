@@ -1,0 +1,12 @@
+{
+  "name": "lost-found-portal",
+  "version": "1.0.0",
+  "description": "Lost & Found Portal - CS 311/224 Web Technologies Assignment 02",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

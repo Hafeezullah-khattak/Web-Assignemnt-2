@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Home | Lost & Found Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <main>
+    <section class="hero">
+      <h1>University Lost & Found Portal</h1>
+      <p>Report lost items, browse found items, and help reunite belongings with their owners.</p>
+    </section>
+
+    <section class="stats">
+      <div class="stat-box">
+        <div class="number" id="stat-total">-</div>
+        <div class="label">Total Items</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" id="stat-lost">-</div>
+        <div class="label">Lost</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" id="stat-found">-</div>
+        <div class="label">Found</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" id="stat-returned">-</div>
+        <div class="label">Returned</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Recently Reported Items</h2>
+      <div class="items-grid" id="recent-items">
+        <p>Loading recent items...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", loadHomePageData);
+  </script>
+</body>
+</html>
