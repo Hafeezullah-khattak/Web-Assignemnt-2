@@ -10,7 +10,24 @@ const app = express();
 const PORT = 3000;
 
 // path to our "database" file
-const DATA_FILE = path.join(__dirname, "data", "items.json");
+// On Vercel, everything except /tmp is read-only, so we use /tmp there instead.
+const ORIGINAL_DATA_FILE = path.join(__dirname, "data", "items.json");
+const DATA_FILE = process.env.VERCEL
+  ? path.join("/tmp", "items.json")
+  : ORIGINAL_DATA_FILE;
+
+// Make sure the writable copy exists before the server starts handling requests.
+async function ensureDataFileReady() {
+  if (!process.env.VERCEL) return; // not needed locally, original file is already writable
+
+  try {
+    await fs.access(DATA_FILE); // check if /tmp/items.json already exists
+  } catch {
+    // doesn't exist yet -> copy the original bundled data into /tmp so we have something to read/write
+    const original = await fs.readFile(ORIGINAL_DATA_FILE, "utf-8");
+    await fs.writeFile(DATA_FILE, original, "utf-8");
+  }
+}
 
 // middleware
 app.use(express.json()); // to read JSON from POST/PUT requests
@@ -22,6 +39,7 @@ app.use("/js", express.static(path.join(__dirname, "js")));
 
 // READ - read items.json and return array of items
 async function readItems() {
+  await ensureDataFileReady(); // on Vercel, makes sure /tmp/items.json exists first
   const raw = await fs.readFile(DATA_FILE, "utf-8");
   return JSON.parse(raw);
 }
